@@ -3,68 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Coming Soon | Humanity Connected</title>
     <style>
-        /* Modern Reset & Center Alignment */
+        :root {
+            --primary-glow: #00d2ff;
+            --secondary-glow: #928dab;
+            --accent: #ff7e5f;
+            --star-color: #ffffff;
+        }
+
         body {
             margin: 0;
-            height: 100vh;
+            padding: 0;
+            background: #050608;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #050608 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at center, #ffffff 0%, #f0f2f5 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: white;
+            overflow-x: hidden;
         }
 
-        /* Glassmorphism Card Effect */
-        .container {
+        /* Star Field Layer */
+        #starField {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        /* Brighter, Slower Shooting Star */
+        .shooting-star {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 3px;
+            background: linear-gradient(-45deg, var(--star-color), rgba(255, 255, 255, 0));
+            filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px var(--primary-glow));
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .animate-shooting {
+            animation: tail 5s ease-in-out, shooting 5s ease-in-out;
+        }
+
+        /* Content Layout */
+        .content {
+            position: relative;
+            z-index: 10;
             text-align: center;
-            padding: 3rem;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            animation: fadeInUp 1s ease-out;
+            max-width: 700px;
+            width: 90%;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin: 20px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--primary-glow);
         }
 
         h1 {
-            font-size: 3rem;
-            margin: 0;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            margin: 0 0 1rem 0;
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #fff 0%, var(--secondary-glow) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        p {
-            color: #777;
-            margin-top: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
+        .human-touch {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #d1d5db;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
         }
 
-        /* Subtle Animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* AI Feature Section */
+        .ai-feature {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
         }
+
+        .ai-feature h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-glow);
+            margin-bottom: 1rem;
+        }
+
+        .ai-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"], input[type="email"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            flex-grow: 1;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary-glow);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        button {
+            background: white;
+            color: #050608;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: var(--primary-glow);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ai-response {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #a0a0a0;
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+        }
+
+        /* Animations */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.3); }
+        }
+
+        @keyframes shooting {
+            0% { transform: translate(0, 0) rotate(45deg) scale(0); opacity: 0; }
+            5% { opacity: 1; transform: translate(0, 0) rotate(45deg) scale(1.2); }
+            25% { transform: translate(800px, 800px) rotate(45deg) scale(1); opacity: 0; }
+            100% { transform: translate(800px, 800px) rotate(45deg) scale(0); opacity: 0; }
+        }
+
+        @keyframes tail {
+            0% { width: 0; }
+            5% { width: 180px; }
+            25% { width: 0; }
+            100% { width: 0; }
+        }
+
+        #starField {
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Loader */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-top: 2px solid #000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Hello World</h1>
-        <p>Welcome to my little corner of the web</p>
+    <div id="starField"></div>
+    <div id="shootingStar" class="shooting-star"></div>
+
+    <div class="content">
+        <div class="tag">Coming Soon</div>
+        <h1>Coming soon.</h1>
+        <p class="human-touch">
+            Beyond the noise of the digital age, we're crafting a sanctuary for genuine connection. 
+            A space where stories matter more than stats.
+        </p>
+
+        <!-- AI Interaction Section -->
+        <div class="ai-feature">
+            <h3>✨ Humanity AI Whisperer</h3>
+            <div class="ai-input-group">
+                <input type="text" id="aiName" placeholder="Enter your name or a word...">
+                <button id="aiBtn" onclick="generateManifesto()">
+                    <span class="spinner" id="btnSpinner"></span>
+                    <span id="btnText">✨ Whisper</span>
+                </button>
+            </div>
+            <div id="aiResponse" class="ai-response"></div>
+        </div>
+
+        <div class="footer" id="dailyInsight">
+            EST. 2024 &bull; BUILT BY HUMANS &bull; <span id="insightLink" style="cursor:pointer; text-decoration: underline;">Read Today's Cosmic Insight</span>
+        </div>
     </div>
 
+    <script>
+        const apiKey = ""; // Provided at runtime
+
+        // Gemini API Interaction
+        async function callGemini(prompt, systemPrompt = "", useSearch = false) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+            if (useSearch) {
+                payload.tools = [{ "google_search": {} }];
+            }
+
+            let lastError;
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error('API Error');
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text;
+                } catch (err) {
+                    lastError = err;
+                    await new Promise(res => setTimeout(res, Math.pow(2, i) * 1000));
+                }
+            }
+            throw lastError;
+        }
+
+        async function generateManifesto() {
+            const input = document.getElementById('aiName').value;
+            if (!input) return;
+
+            const btn = document.getElementById('aiBtn');
+            const spinner = document.getElementById('btnSpinner');
+            const btnText = document.getElementById('btnText');
+            const responseDiv = document.getElementById('aiResponse');
+
+            btn.disabled = true;
+            spinner.style.display = 'inline-block';
+            btnText.innerText = 'Whispering...';
+
+            try {
+                const prompt = `Generate a 2-sentence poetic "Humanity Connection Manifesto" for a person named or associated with the word "${input}". Make it sound like it was written among the stars, focusing on soul and digital sanctuary.`;
+                const systemPrompt = "You are a poetic cosmic philosopher for a project called 'Something Human'. Keep responses short and beautiful.";
+                const result = await callGemini(prompt, systemPrompt);
+                
+                responseDiv.innerText = result;
+                responseDiv.style.display = 'block';
+            } catch (err) {
+                responseDiv.innerText = "The stars are quiet right now. Please try again soon.";
+                responseDiv.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.innerText = '✨ Whisper';
+            }
+        }
+
+        // Search-grounded Daily Insight
+        document.getElementById('insightLink').addEventListener('click', async () => {
+            const link = document.getElementById('insightLink');
+            link.innerText = "Consulting the stars...";
+            
+            try {
+                const prompt = "Find one recent positive human-interest story or a breakthrough in space exploration from the last 48 hours and summarize it in one beautiful sentence for a 'Coming Soon' website.";
+                const systemPrompt = "You are a cosmic curator. Use Google Search to find real news.";
+                const result = await callGemini(prompt, systemPrompt, true);
+                
+                const responseDiv = document.getElementById('aiResponse');
+                responseDiv.innerHTML = `<strong>Today's Cosmic Insight:</strong><br>${result}`;
+                responseDiv.style.display = 'block';
+                link.innerText = "Insight Received";
+            } catch (e) {
+                link.innerText = "Insight unavailable";
+            }
+        });
+
+        // Generate random static stars
+        const container = document.getElementById('starField');
+        const starCount = 200;
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = (Math.random() * 2 + 1) + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            container.appendChild(star);
+        }
+
+        // Randomize Shooting Star logic
+        const shootingStar = document.getElementById('shootingStar');
+        
+        function triggerShootingStar() {
+            const startX = Math.random() * 80 + 20;
+            const startY = Math.random() * 40;
+            shootingStar.style.left = startX + '%';
+            shootingStar.style.top = startY + '%';
+            shootingStar.classList.add('animate-shooting');
+            
+            setTimeout(() => {
+                shootingStar.classList.remove('animate-shooting');
+                const nextDelay = Math.random() * 6000 + 2000;
+                setTimeout(triggerShootingStar, nextDelay);
+            }, 5000);
+        }
+
+        setTimeout(triggerShootingStar, 2000);
+
+        // Mouse Parallax Effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            container.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    </script>
 </body>
 </html>
