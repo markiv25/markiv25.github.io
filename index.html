@@ -79,28 +79,26 @@
             margin: 20px 0;
         }
 
-        .tag {
-            display: inline-block;
-            padding: 6px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 100px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 24px;
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--primary-glow);
-        }
-
+        /* Heading VFX */
         h1 {
             font-size: clamp(2.5rem, 8vw, 4.5rem);
             margin: 0 0 1rem 0;
-            line-height: 1;
+            line-height: 1.2;
+            padding-bottom: 0.1em;
             font-weight: 800;
             letter-spacing: -2px;
             background: linear-gradient(135deg, #fff 0%, var(--secondary-glow) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            cursor: default;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1:hover {
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 30px var(--primary-glow));
         }
 
         .human-touch {
@@ -109,82 +107,6 @@
             color: #d1d5db;
             margin-bottom: 2.5rem;
             font-weight: 300;
-        }
-
-        /* AI Feature Section */
-        .ai-feature {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: left;
-        }
-
-        .ai-feature h3 {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--primary-glow);
-            margin-bottom: 1rem;
-        }
-
-        .ai-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1rem;
-        }
-
-        input[type="text"], input[type="email"] {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 12px 20px;
-            border-radius: 12px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            flex-grow: 1;
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            border-color: var(--primary-glow);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        button {
-            background: white;
-            color: #050608;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            background: var(--primary-glow);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .ai-response {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: #a0a0a0;
-            font-style: italic;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 10px;
-            display: none;
         }
 
         .footer {
@@ -217,18 +139,6 @@
         #starField {
             transition: transform 0.1s ease-out;
         }
-
-        /* Loader */
-        .spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(0,0,0,0.1);
-            border-top: 2px solid #000;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            display: none;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -237,113 +147,18 @@
     <div id="shootingStar" class="shooting-star"></div>
 
     <div class="content">
-        <div class="tag">Coming Soon</div>
-        <h1>Coming soon.</h1>
+        <h1 id="mainTitle">Coming soon.</h1>
         <p class="human-touch">
             Beyond the noise of the digital age, we're crafting a sanctuary for genuine connection. 
             A space where stories matter more than stats.
         </p>
 
-        <!-- AI Interaction Section -->
-        <div class="ai-feature">
-            <h3>✨ Humanity AI Whisperer</h3>
-            <div class="ai-input-group">
-                <input type="text" id="aiName" placeholder="Enter your name or a word...">
-                <button id="aiBtn" onclick="generateManifesto()">
-                    <span class="spinner" id="btnSpinner"></span>
-                    <span id="btnText">✨ Whisper</span>
-                </button>
-            </div>
-            <div id="aiResponse" class="ai-response"></div>
-        </div>
-
-        <div class="footer" id="dailyInsight">
-            EST. 2024 &bull; BUILT BY HUMANS &bull; <span id="insightLink" style="cursor:pointer; text-decoration: underline;">Read Today's Cosmic Insight</span>
+        <div class="footer">
+            EST. 2026 &bull; BUILT BY HUMANS
         </div>
     </div>
 
     <script>
-        const apiKey = ""; // Provided at runtime
-
-        // Gemini API Interaction
-        async function callGemini(prompt, systemPrompt = "", useSearch = false) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
-            };
-            if (useSearch) {
-                payload.tools = [{ "google_search": {} }];
-            }
-
-            let lastError;
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) throw new Error('API Error');
-                    const data = await response.json();
-                    return data.candidates?.[0]?.content?.parts?.[0]?.text;
-                } catch (err) {
-                    lastError = err;
-                    await new Promise(res => setTimeout(res, Math.pow(2, i) * 1000));
-                }
-            }
-            throw lastError;
-        }
-
-        async function generateManifesto() {
-            const input = document.getElementById('aiName').value;
-            if (!input) return;
-
-            const btn = document.getElementById('aiBtn');
-            const spinner = document.getElementById('btnSpinner');
-            const btnText = document.getElementById('btnText');
-            const responseDiv = document.getElementById('aiResponse');
-
-            btn.disabled = true;
-            spinner.style.display = 'inline-block';
-            btnText.innerText = 'Whispering...';
-
-            try {
-                const prompt = `Generate a 2-sentence poetic "Humanity Connection Manifesto" for a person named or associated with the word "${input}". Make it sound like it was written among the stars, focusing on soul and digital sanctuary.`;
-                const systemPrompt = "You are a poetic cosmic philosopher for a project called 'Something Human'. Keep responses short and beautiful.";
-                const result = await callGemini(prompt, systemPrompt);
-                
-                responseDiv.innerText = result;
-                responseDiv.style.display = 'block';
-            } catch (err) {
-                responseDiv.innerText = "The stars are quiet right now. Please try again soon.";
-                responseDiv.style.display = 'block';
-            } finally {
-                btn.disabled = false;
-                spinner.style.display = 'none';
-                btnText.innerText = '✨ Whisper';
-            }
-        }
-
-        // Search-grounded Daily Insight
-        document.getElementById('insightLink').addEventListener('click', async () => {
-            const link = document.getElementById('insightLink');
-            link.innerText = "Consulting the stars...";
-            
-            try {
-                const prompt = "Find one recent positive human-interest story or a breakthrough in space exploration from the last 48 hours and summarize it in one beautiful sentence for a 'Coming Soon' website.";
-                const systemPrompt = "You are a cosmic curator. Use Google Search to find real news.";
-                const result = await callGemini(prompt, systemPrompt, true);
-                
-                const responseDiv = document.getElementById('aiResponse');
-                responseDiv.innerHTML = `<strong>Today's Cosmic Insight:</strong><br>${result}`;
-                responseDiv.style.display = 'block';
-                link.innerText = "Insight Received";
-            } catch (e) {
-                link.innerText = "Insight unavailable";
-            }
-        });
-
         // Generate random static stars
         const container = document.getElementById('starField');
         const starCount = 200;
