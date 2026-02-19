@@ -1,205 +1,1212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon | Humanity Connected</title>
-    <style>
-        :root {
-            --primary-glow: #00d2ff;
-            --secondary-glow: #928dab;
-            --accent: #ff7e5f;
-            --star-color: #ffffff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UTG — Universal Trust Gateway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background: #050608;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #050608 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            color: white;
-            overflow-x: hidden;
-        }
+:root {
+  --black: #050608;
+  --surface: #0d0f14;
+  --surface-2: #13161e;
+  --surface-3: #1a1e2a;
+  --border: #1f2435;
+  --border-bright: #2a3048;
+  --green: #00e87a;
+  --green-dim: #00e87a22;
+  --green-mid: #00e87a55;
+  --blue: #4d9fff;
+  --blue-dim: #4d9fff18;
+  --amber: #ffb340;
+  --amber-dim: #ffb34020;
+  --red: #ff5c5c;
+  --muted: #4a5168;
+  --text: #c8cedd;
+  --text-bright: #eef1f8;
+  --mono: 'DM Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --glow: 0 0 40px #00e87a18;
+}
 
-        /* Star Field Layer */
-        #starField {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
+html { scroll-behavior: smooth; }
 
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: twinkle var(--duration) infinite ease-in-out;
-        }
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-        /* Brighter, Slower Shooting Star */
-        .shooting-star {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 3px;
-            height: 3px;
-            background: linear-gradient(-45deg, var(--star-color), rgba(255, 255, 255, 0));
-            filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px var(--primary-glow));
-            z-index: 1;
-            opacity: 0;
-            pointer-events: none;
-        }
+/* ── Background grid ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
 
-        .animate-shooting {
-            animation: tail 5s ease-in-out, shooting 5s ease-in-out;
-        }
+.page { position: relative; z-index: 1; }
 
-        /* Content Layout */
-        .content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            max-width: 700px;
-            width: 90%;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            margin: 20px 0;
-        }
+/* ── Nav ── */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(5,6,8,0.85);
+}
 
-        /* Heading VFX */
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            margin: 0 0 1rem 0;
-            line-height: 1.2;
-            padding-bottom: 0.1em;
-            font-weight: 800;
-            letter-spacing: -2px;
-            background: linear-gradient(135deg, #fff 0%, var(--secondary-glow) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: default;
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
-            position: relative;
-            display: inline-block;
-        }
+.logo {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-bright);
+  letter-spacing: 0.05em;
+}
 
-        h1:hover {
-            transform: scale(1.03);
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 30px var(--primary-glow));
-        }
+.logo span {
+  color: var(--green);
+  font-weight: 400;
+}
 
-        .human-touch {
-            font-size: 1.15rem;
-            line-height: 1.7;
-            color: #d1d5db;
-            margin-bottom: 2.5rem;
-            font-weight: 300;
-        }
+.nav-links {
+  display: flex; gap: 32px; list-style: none;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
 
-        .footer {
-            margin-top: 3rem;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 1px;
-        }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text-bright); }
 
-        /* Animations */
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.3); }
-        }
+.nav-cta {
+  background: var(--green);
+  color: var(--black);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 20px;
+  border: none; cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
 
-        @keyframes shooting {
-            0% { transform: translate(0, 0) rotate(45deg) scale(0); opacity: 0; }
-            5% { opacity: 1; transform: translate(0, 0) rotate(45deg) scale(1.2); }
-            25% { transform: translate(800px, 800px) rotate(45deg) scale(1); opacity: 0; }
-            100% { transform: translate(800px, 800px) rotate(45deg) scale(0); opacity: 0; }
-        }
+/* ── Hero ── */
+.hero {
+  padding: 100px 40px 80px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
 
-        @keyframes tail {
-            0% { width: 0; }
-            5% { width: 180px; }
-            25% { width: 0; }
-            100% { width: 0; }
-        }
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-mid);
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 6px 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+  animation: pulse-badge 3s ease-in-out infinite;
+}
 
-        #starField {
-            transition: transform 0.1s ease-out;
-        }
-    </style>
+@keyframes pulse-badge {
+  0%, 100% { box-shadow: 0 0 0 0 var(--green-dim); }
+  50% { box-shadow: 0 0 0 8px transparent; }
+}
+
+.badge-dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: blink 1.5s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+h1 {
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 800;
+  color: var(--text-bright);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+}
+
+h1 em {
+  font-style: normal;
+  color: var(--green);
+  position: relative;
+}
+
+.hero-sub {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 560px;
+  margin: 0 auto 52px;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--green);
+  color: var(--black);
+  border: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 14px 32px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px var(--green-mid);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border-bright);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 14px 32px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+}
+.btn-secondary:hover {
+  border-color: var(--muted);
+  color: var(--text-bright);
+}
+
+/* ── Stats bar ── */
+.stats-bar {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  margin: 0 40px;
+}
+
+.stat {
+  padding: 28px 32px;
+  border-right: 1px solid var(--border);
+}
+.stat:last-child { border-right: none; }
+
+.stat-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-bright);
+  display: block;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+  font-family: var(--mono);
+}
+
+.stat-num .accent { color: var(--green); }
+
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Main layout ── */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  align-items: start;
+}
+
+/* ── Section headers ── */
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.section-body {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 40px;
+}
+
+/* ── Flow diagram ── */
+.flow-diagram {
+  position: relative;
+  padding: 40px 0;
+}
+
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.flow-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 48px;
+  bottom: -16px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--green-mid), transparent);
+}
+
+.step-icon {
+  width: 40px; height: 40px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-bright);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.step-icon.active {
+  border-color: var(--green);
+  background: var(--green-dim);
+  box-shadow: var(--glow);
+}
+
+.step-content { padding-top: 8px; padding-bottom: 24px; }
+
+.step-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+
+.step-detail {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.step-tag {
+  display: inline-block;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  margin-top: 6px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── Demo Panel ── */
+.demo-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  position: sticky;
+  top: 80px;
+  overflow: hidden;
+}
+
+.demo-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.demo-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.demo-dots { display: flex; gap: 6px; }
+.demo-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: none; border-right: 1px solid var(--border);
+  border-top: none; border-left: none;
+}
+.tab:last-child { border-right: none; }
+.tab.active {
+  color: var(--green);
+  border-bottom-color: var(--green);
+  background: var(--green-dim);
+}
+.tab:hover:not(.active) { color: var(--text); }
+
+/* ── Live Demo ── */
+.demo-content { padding: 28px 24px; }
+
+.demo-config { margin-bottom: 24px; }
+
+.config-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.config-row:last-child { border-bottom: none; }
+
+.config-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.config-select, .config-input {
+  background: var(--surface-3);
+  border: 1px solid var(--border-bright);
+  color: var(--text-bright);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 10px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.config-select:focus, .config-input:focus {
+  border-color: var(--green);
+}
+
+/* ── Verify Button ── */
+.verify-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--green);
+  border: none;
+  color: var(--black);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.verify-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+.verify-btn:hover::before { transform: translateX(100%); }
+.verify-btn:disabled {
+  opacity: 0.5; cursor: not-allowed;
+}
+.verify-btn:hover:not(:disabled) {
+  box-shadow: 0 4px 24px var(--green-mid);
+}
+
+/* ── Progress steps ── */
+.progress-log {
+  margin-top: 20px;
+  font-family: var(--mono);
+  font-size: 12px;
+  min-height: 140px;
+}
+
+.log-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 5px 0;
+  color: var(--muted);
+  animation: fadeInLine 0.3s ease;
+}
+@keyframes fadeInLine {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.log-line.success { color: var(--green); }
+.log-line.error { color: var(--red); }
+.log-line.info { color: var(--blue); }
+
+.log-prefix { color: var(--border-bright); flex-shrink: 0; }
+.log-spinner {
+  display: inline-block;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Result token ── */
+.result-box {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--green-mid);
+  display: none;
+}
+.result-box.visible { display: block; animation: fadeInLine 0.4s ease; }
+
+.result-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.result-claims {
+  list-style: none;
+}
+.result-claim {
+  display: flex; justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.result-claim:last-child { border-bottom: none; }
+.claim-key { color: var(--muted); }
+.claim-val { color: var(--text-bright); }
+.claim-val.true { color: var(--green); }
+.claim-val.false { color: var(--red); }
+
+/* ── Code tab ── */
+.code-block {
+  padding: 20px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text);
+  overflow-x: auto;
+  white-space: pre;
+  display: none;
+}
+.code-block.visible { display: block; }
+.kw { color: var(--blue); }
+.str { color: var(--green); }
+.cm { color: var(--muted); font-style: italic; }
+.fn { color: var(--amber); }
+.num { color: #c792ea; }
+
+/* ── Architecture diagram ── */
+.arch-section {
+  padding: 60px 40px;
+  border-top: 1px solid var(--border);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.arch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 40px;
+  border: 1px solid var(--border);
+}
+
+.arch-block {
+  background: var(--surface);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.arch-block:hover { background: var(--surface-2); }
+
+.arch-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.arch-block.issuer::before { background: var(--blue); }
+.arch-block.utg::before { background: var(--green); }
+.arch-block.verifier::before { background: var(--amber); }
+
+.arch-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.arch-block-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.arch-block-sub {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.arch-tag {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+.arch-tag.issuer { background: var(--blue-dim); color: var(--blue); border: 1px solid var(--blue); }
+.arch-tag.utg { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+.arch-tag.verifier { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+
+/* ── Pricing ── */
+.pricing-section {
+  padding: 60px 40px;
+  border-top: 1px solid var(--border);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+.plan {
+  background: var(--surface);
+  padding: 40px 32px;
+}
+.plan.featured {
+  background: var(--surface-2);
+  position: relative;
+}
+.plan.featured::before {
+  content: 'MOST POPULAR';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  background: var(--green);
+  color: var(--black);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  padding: 4px 16px;
+  letter-spacing: 0.1em;
+}
+
+.plan-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.plan-price {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+  font-family: var(--mono);
+}
+
+.plan-price sup {
+  font-size: 18px; vertical-align: top; margin-top: 10px;
+  color: var(--muted); font-weight: 400;
+}
+.plan-price .per {
+  font-size: 14px; color: var(--muted); font-weight: 400;
+}
+
+.plan-desc {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.plan-features {
+  list-style: none;
+  margin-bottom: 32px;
+}
+.plan-feature {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.plan-feature::before { content: '→'; color: var(--green); font-size: 10px; }
+
+.plan-btn {
+  width: 100%;
+  padding: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid var(--border-bright);
+  background: transparent;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.plan.featured .plan-btn {
+  background: var(--green);
+  color: var(--black);
+  border-color: var(--green);
+}
+.plan-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+.plan.featured .plan-btn:hover {
+  opacity: 0.85;
+  color: var(--black);
+}
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .main { grid-template-columns: 1fr; }
+  .demo-panel { position: static; margin-top: 40px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .arch-grid, .pricing-grid { grid-template-columns: 1fr; }
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .main, .arch-section, .pricing-section { padding: 40px 20px; }
+  .stats-bar { margin: 0 20px; }
+}
+</style>
 </head>
 <body>
+<div class="page">
 
-    <div id="starField"></div>
-    <div id="shootingStar" class="shooting-star"></div>
+<!-- Nav -->
+<nav>
+  <div class="logo">UTG<span>/</span> Universal Trust Gateway</div>
+  <ul class="nav-links">
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#">Docs</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Get API Key →</button>
+</nav>
 
-    <div class="content">
-        <h1 id="mainTitle">Coming soon.</h1>
-        <p class="human-touch">
-            Beyond the noise of the digital age, we're crafting a sanctuary for genuine connection. 
-            A space where stories matter more than stats.
-        </p>
+<!-- Hero -->
+<section class="hero">
+  <div class="badge">
+    <div class="badge-dot"></div>
+    Live — EU DSA Compliant · GDPR-Native · W3C VC
+  </div>
+  <h1>Age verification<br>that <em>doesn't leak</em><br>your data</h1>
+  <p class="hero-sub">One SDK. Every digital wallet. Zero PII stored. The Stripe for identity — an orchestration layer bridging EU Wallets, Apple mDL, and BankID to any website.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Try Live Demo →</button>
+    <button class="btn-secondary">Read the Docs</button>
+  </div>
+</section>
 
-        <div class="footer">
-            EST. 2026 &bull; BUILT BY HUMANS
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num" id="stat-verifications">0</span>
+    <span class="stat-label">Verifications / day</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num"><span class="accent">&lt;</span>1s</span>
+    <span class="stat-label">Median latency</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num"><span class="accent">0</span></span>
+    <span class="stat-label">PII bytes stored</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">99.<span class="accent">9</span>%</span>
+    <span class="stat-label">Uptime SLA</span>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main" id="demo">
+
+  <!-- Left: Flow -->
+  <div>
+    <div class="section-label">How it works</div>
+    <div class="section-title">One-tap. Biometric-signed.<br>Legally compliant.</div>
+    <p class="section-body">UTG acts as the orchestration layer between fragmented government wallets and the websites that need to verify users. No scanning IDs. No storing birthdays. Just a cryptographic proof that the user is old enough.</p>
+
+    <div class="flow-diagram">
+      <div class="flow-step">
+        <div class="step-icon" id="step-1">🌐</div>
+        <div class="step-content">
+          <div class="step-title">Website triggers UTG SDK</div>
+          <div class="step-detail">A single JS call: <code style="color:var(--green);font-size:11px">UTG.verify({ ageThreshold: 18 })</code>. The SDK creates a challenge session server-side and detects available on-device credentials.</div>
+          <span class="step-tag">POST /v1/session/create</span>
         </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon" id="step-2">🔍</div>
+        <div class="step-content">
+          <div class="step-title">Wallet detection & selection</div>
+          <div class="step-detail">SDK silently probes for EU Wallet (OID4VP), Apple/Google mDL (Digital Credentials API), and BankID. Presents the best available option — or a picker.</div>
+          <span class="step-tag">W3C Digital Credentials API</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon" id="step-3">🔐</div>
+        <div class="step-content">
+          <div class="step-title">ZKP handshake — on device</div>
+          <div class="step-detail">User's phone generates a Zero-Knowledge Proof: "I am over 18." Signed in the Secure Enclave via biometric. <strong style="color:var(--text-bright)">No DOB leaves the device.</strong></div>
+          <span class="step-tag">ISO 18013-5 · BBS+ · EdDSA</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon" id="step-4">✅</div>
+        <div class="step-content">
+          <div class="step-title">Signed JWT returned to site</div>
+          <div class="step-detail">UTG server verifies the ZKP against the issuer's DID, then returns a short-lived, tenant-scoped JWT. The website backend calls <code style="color:var(--green);font-size:11px">/v1/jwt/introspect</code> to confirm.</div>
+          <span class="step-tag">POST /v1/session/verify</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Demo Panel -->
+  <div class="demo-panel">
+    <div class="demo-header">
+      <div class="demo-dots">
+        <div class="demo-dot" style="background:#ff5f57"></div>
+        <div class="demo-dot" style="background:#febc2e"></div>
+        <div class="demo-dot" style="background:#28c840"></div>
+      </div>
+      <div class="demo-title">UTG Sandbox</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">v1.0.0</div>
     </div>
 
-    <script>
-        // Generate random static stars
-        const container = document.getElementById('starField');
-        const starCount = 200;
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('live')">Live Demo</button>
+      <button class="tab" onclick="showTab('code')">Integration</button>
+      <button class="tab" onclick="showTab('schema')">Schema</button>
+    </div>
 
-        for (let i = 0; i < starCount; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = (Math.random() * 2 + 1) + 'px';
-            star.style.width = size;
-            star.style.height = size;
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-            container.appendChild(star);
-        }
+    <!-- Live Demo Tab -->
+    <div id="tab-live" class="demo-content">
+      <div class="demo-config">
+        <div class="config-row">
+          <span class="config-label">Age Threshold</span>
+          <select class="config-select" id="cfg-threshold">
+            <option value="13">13+</option>
+            <option value="16">16+</option>
+            <option value="18" selected>18+</option>
+            <option value="21">21+</option>
+          </select>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Credential Type</span>
+          <select class="config-select" id="cfg-wallet">
+            <option value="eu_wallet">EU Wallet (EBSI)</option>
+            <option value="apple_mdl">Apple mDL</option>
+            <option value="google_mdl">Google Wallet</option>
+            <option value="bankid">BankID</option>
+          </select>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Scenario</span>
+          <select class="config-select" id="cfg-scenario">
+            <option value="pass">✅ User passes</option>
+            <option value="fail">❌ Age too low</option>
+            <option value="expired">⏱ Expired session</option>
+          </select>
+        </div>
+      </div>
 
-        // Randomize Shooting Star logic
-        const shootingStar = document.getElementById('shootingStar');
-        
-        function triggerShootingStar() {
-            const startX = Math.random() * 80 + 20;
-            const startY = Math.random() * 40;
-            shootingStar.style.left = startX + '%';
-            shootingStar.style.top = startY + '%';
-            shootingStar.classList.add('animate-shooting');
-            
-            setTimeout(() => {
-                shootingStar.classList.remove('animate-shooting');
-                const nextDelay = Math.random() * 6000 + 2000;
-                setTimeout(triggerShootingStar, nextDelay);
-            }, 5000);
-        }
+      <button class="verify-btn" id="verify-btn" onclick="runDemo()">
+        ▶ Run Verification
+      </button>
 
-        setTimeout(triggerShootingStar, 2000);
+      <div class="progress-log" id="progress-log">
+        <div class="log-line" style="color:var(--border-bright)">
+          <span class="log-prefix">$</span>
+          <span>UTG sandbox ready. Press Run to simulate.</span>
+        </div>
+      </div>
 
-        // Mouse Parallax Effect
-        document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-            container.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        });
-    </script>
+      <div class="result-box" id="result-box">
+        <div class="result-label">✓ Result JWT Claims</div>
+        <ul class="result-claims" id="result-claims"></ul>
+      </div>
+    </div>
+
+    <!-- Code Tab -->
+    <div id="tab-code" class="code-block" style="display:none"><!-- prettier-ignore --><span class="cm">// 1. Install SDK</span>
+<span class="kw">npm</span> install @utg/sdk
+
+<span class="cm">// 2. Frontend — one line</span>
+<span class="kw">import</span> { UTG } <span class="kw">from</span> <span class="str">'@utg/sdk'</span>
+
+<span class="kw">const</span> { token } = <span class="kw">await</span> <span class="fn">UTG.verify</span>({
+  apiKey: <span class="str">'pk_live_...'</span>,
+  ageThreshold: <span class="num">18</span>,
+})
+
+<span class="cm">// 3. Backend — verify the JWT</span>
+<span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'https://api.utg.io/v1/jwt/introspect'</span>, {
+  method: <span class="str">'POST'</span>,
+  headers: {
+    <span class="str">'X-Api-Key'</span>: <span class="str">'sk_live_...'</span>,
+    <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>,
+  },
+  body: <span class="fn">JSON.stringify</span>({ token }),
+})
+
+<span class="kw">const</span> { active, claims } = <span class="kw">await</span> res.<span class="fn">json</span>()
+<span class="cm">// claims['utg:verified'] === true</span>
+<span class="cm">// claims['utg:age_threshold'] === 18</span>
+<span class="cm">// claims['utg:trust_level'] === 3 (gov-issued)</span>
+<span class="cm">// No DOB. No name. GDPR-clean.</span>
+    </div>
+
+    <!-- Schema Tab -->
+    <div id="tab-schema" class="code-block" style="display:none"><span class="cm">-- Core tables (simplified view)</span>
+
+<span class="kw">CREATE TABLE</span> verification_sessions (
+  id              UUID <span class="kw">PRIMARY KEY</span>,
+  tenant_id       UUID,
+  status          <span class="kw">TEXT</span>,      <span class="cm">-- pending/completed/failed</span>
+  challenge_b64   <span class="kw">TEXT</span>,      <span class="cm">-- FIDO2 nonce</span>
+  age_threshold   SMALLINT,  <span class="cm">-- 18, 21, etc</span>
+  age_claim_verified <span class="kw">BOOL</span>, <span class="cm">-- NO DOB stored</span>
+  proof_receipt   JSONB,     <span class="cm">-- ZKP signature data</span>
+  issuer_did      <span class="kw">TEXT</span>,      <span class="cm">-- public DID only</span>
+  device_fp_hash  <span class="kw">TEXT</span>,      <span class="cm">-- SHA-256, not raw</span>
+  result_jwt_jti  UUID       <span class="cm">-- for revocation</span>
+);
+
+<span class="kw">CREATE TABLE</span> trust_links (
+  parent_credential_hash <span class="kw">TEXT</span>, <span class="cm">-- hashed + peppered</span>
+  child_credential_hash  <span class="kw">TEXT</span>,
+  authorized_age_threshold SMALLINT,
+  parent_signature_b64   <span class="kw">TEXT</span>,  <span class="cm">-- cryptographic grant</span>
+  expires_at             TIMESTAMPTZ
+);
+    </div>
+  </div>
+</div>
+
+<!-- Architecture -->
+<section class="arch-section" id="architecture">
+  <div class="section-label">Architecture</div>
+  <div class="section-title">Three-layer trust model</div>
+  <p class="section-body">UTG sits between fragmented identity issuers and the websites that need verification. We own the orchestration layer — nobody else does.</p>
+
+  <div class="arch-grid">
+    <div class="arch-block issuer">
+      <span class="arch-icon">🏛️</span>
+      <div class="arch-block-title">Issuers</div>
+      <div class="arch-block-sub">EU Identity Wallets (EBSI), Apple mDL (ISO 18013-5), Google Wallet, BankID (SE/NO/FI), National eID systems. Government-level trust.</div>
+      <span class="arch-tag issuer">Trust Level 3</span>
+    </div>
+    <div class="arch-block utg">
+      <span class="arch-icon">⚡</span>
+      <div class="arch-block-title">UTG Orchestration Layer</div>
+      <div class="arch-block-sub">Stateless middleware. Verifies ZKPs against issuer DIDs. Issues short-lived, tenant-scoped JWTs. Stores zero PII. Manages challenge/response lifecycle.</div>
+      <span class="arch-tag utg">The Gap We Fill</span>
+    </div>
+    <div class="arch-block verifier">
+      <span class="arch-icon">🌐</span>
+      <div class="arch-block-title">Verifiers</div>
+      <div class="arch-block-sub">Your gambling platform, social network, alcohol delivery app, or adult content site. Integrate once, support every wallet. One API key. $0.001/check.</div>
+      <span class="arch-tag verifier">SDK Integration</span>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing-section" id="pricing">
+  <div class="section-label">Pricing</div>
+  <div class="section-title">Pay as you verify</div>
+
+  <div class="pricing-grid">
+    <div class="plan">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sup>$</sup>0<span class="per">/mo</span></div>
+      <div class="plan-desc">10,000 free verifications. For startups and side projects building trust infrastructure.</div>
+      <ul class="plan-features">
+        <li class="plan-feature">10,000 verifications/mo</li>
+        <li class="plan-feature">EU Wallet + Apple mDL</li>
+        <li class="plan-feature">JWT introspection API</li>
+        <li class="plan-feature">Sandbox environment</li>
+        <li class="plan-feature">Community support</li>
+      </ul>
+      <button class="plan-btn">Start Free →</button>
+    </div>
+    <div class="plan featured">
+      <div class="plan-name">Growth</div>
+      <div class="plan-price"><sup>$</sup>299<span class="per">/mo</span></div>
+      <div class="plan-desc">+ $0.001 per verification. For scaling platforms that need compliance at volume.</div>
+      <ul class="plan-features">
+        <li class="plan-feature">Unlimited verifications</li>
+        <li class="plan-feature">All wallets + BankID</li>
+        <li class="plan-feature">Parent-Child trust links</li>
+        <li class="plan-feature">Webhook events</li>
+        <li class="plan-feature">SLA + email support</li>
+      </ul>
+      <button class="plan-btn">Get Started →</button>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price" style="font-size:28px;margin-top:8px">Custom</div>
+      <div class="plan-desc">Dedicated infrastructure, custom SLAs, on-prem option, and white-label SDK.</div>
+      <ul class="plan-features">
+        <li class="plan-feature">99.99% uptime SLA</li>
+        <li class="plan-feature">On-premise deployment</li>
+        <li class="plan-feature">Custom issuer integrations</li>
+        <li class="plan-feature">White-label SDK</li>
+        <li class="plan-feature">Dedicated Slack + TAM</li>
+      </ul>
+      <button class="plan-btn">Contact Sales →</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div>© 2026 Universal Trust Gateway, Inc. — Zero PII. Always.</div>
+  <div style="display:flex;gap:32px">
+    <a href="#" style="color:var(--muted);text-decoration:none">Privacy</a>
+    <a href="#" style="color:var(--muted);text-decoration:none">Terms</a>
+    <a href="#" style="color:var(--muted);text-decoration:none">Status</a>
+    <a href="#" style="color:var(--muted);text-decoration:none">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+// ── Tab switching ─────────────────────────────────────────────────────────
+function showTab(name) {
+  ['live','code','schema'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    el.style.display = 'none';
+    el.classList.remove('visible');
+  });
+  document.querySelectorAll('.tab').forEach((btn, i) => {
+    btn.classList.remove('active');
+    if (['live','code','schema'][i] === name) btn.classList.add('active');
+  });
+  const el = document.getElementById('tab-' + name);
+  el.style.display = name === 'live' ? 'block' : 'block';
+  el.classList.add('visible');
+  if (name !== 'live') el.style.display = 'block';
+}
+
+// ── Animated stat counter ────────────────────────────────────────────────
+function animateCount(el, target, suffix='') {
+  let n = 0;
+  const step = Math.ceil(target / 60);
+  const t = setInterval(() => {
+    n = Math.min(n + step, target);
+    el.textContent = n.toLocaleString() + suffix;
+    if (n >= target) clearInterval(t);
+  }, 16);
+}
+animateCount(document.getElementById('stat-verifications'), 1247893, '');
+
+// ── Demo simulation ───────────────────────────────────────────────────────
+let running = false;
+const STEPS = [
+  { delay: 400,  type: 'info',    icon: '⚡', msg: 'Creating verification session...' },
+  { delay: 700,  type: '',        icon: '🔍', msg: 'Detecting on-device wallets...' },
+  { delay: 1100, type: 'info',    icon: '✓',  msg: (w) => `Found: ${w}` },
+  { delay: 1600, type: '',        icon: '🔐', msg: 'Requesting biometric confirmation...' },
+  { delay: 2400, type: '',        icon: '⏳', msg: 'Generating Zero-Knowledge Proof...' },
+  { delay: 3000, type: '',        icon: '📡', msg: 'Submitting proof to UTG server...' },
+  { delay: 3600, type: '',        icon: '🔎', msg: 'Verifying against issuer DID...' },
+];
+
+const WALLET_LABELS = {
+  eu_wallet: 'EU Identity Wallet (EBSI)',
+  apple_mdl: 'Apple Wallet mDL',
+  google_mdl: 'Google Wallet mDL',
+  bankid: 'BankID',
+};
+
+function addLog(type, icon, msg) {
+  const log = document.getElementById('progress-log');
+  const line = document.createElement('div');
+  line.className = `log-line ${type}`;
+  line.innerHTML = `<span class="log-prefix">›</span><span>${icon} ${msg}</span>`;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function runDemo() {
+  if (running) return;
+  running = true;
+  const btn = document.getElementById('verify-btn');
+  btn.disabled = true;
+
+  const threshold = document.getElementById('cfg-threshold').value;
+  const wallet = document.getElementById('cfg-wallet').value;
+  const scenario = document.getElementById('cfg-scenario').value;
+
+  // Clear previous
+  document.getElementById('progress-log').innerHTML = '';
+  document.getElementById('result-box').classList.remove('visible');
+
+  // Highlight flow steps
+  const stepEls = ['step-1','step-2','step-3','step-4'];
+  stepEls.forEach(id => document.getElementById(id)?.classList.remove('active'));
+
+  // Run steps
+  for (let i = 0; i < STEPS.length; i++) {
+    const s = STEPS[i];
+    await wait(s.delay - (i > 0 ? STEPS[i-1].delay : 0));
+
+    if (scenario === 'expired' && i === 5) {
+      addLog('error', '⏱', 'Challenge expired. Session timed out.');
+      addLog('error', '✗', 'Verification failed: EXPIRED_SESSION');
+      break;
+    }
+
+    const msg = typeof s.msg === 'function' ? s.msg(WALLET_LABELS[wallet]) : s.msg;
+    addLog(s.type, s.icon, msg);
+
+    // Sync flow steps
+    if (i === 0) document.getElementById('step-1')?.classList.add('active');
+    if (i === 1) document.getElementById('step-2')?.classList.add('active');
+    if (i === 3) document.getElementById('step-3')?.classList.add('active');
+  }
+
+  if (scenario === 'expired') {
+    running = false; btn.disabled = false; return;
+  }
+
+  await wait(400);
+
+  if (scenario === 'fail') {
+    addLog('error', '✗', `Age requirement not met. User is under ${threshold}.`);
+    addLog('error', '●', 'Verification failed: AGE_REQUIREMENT_NOT_MET');
+  } else {
+    addLog('success', '✓', `Proof verified. Issuer: did:${wallet.replace('_',':')}:v1`);
+    addLog('success', '🎉', 'JWT issued successfully!');
+    document.getElementById('step-4')?.classList.add('active');
+    showResultBox(threshold, wallet);
+  }
+
+  running = false; btn.disabled = false;
+}
+
+function showResultBox(threshold, wallet) {
+  const box = document.getElementById('result-box');
+  const list = document.getElementById('result-claims');
+  const jti = randomJti();
+  const exp = new Date(Date.now() + 300000).toISOString();
+
+  list.innerHTML = [
+    ['utg:verified',        'true',    'true'],
+    ['utg:age_threshold',   threshold, ''],
+    ['utg:credential_type', wallet,    ''],
+    ['utg:trust_level',     wallet === 'eu_wallet' || wallet === 'bankid' ? '3' : '2', ''],
+    ['iss',                 'api.utg.io', ''],
+    ['jti',                 jti.slice(0,13)+'…', ''],
+    ['exp',                 exp.slice(0,19)+'Z', ''],
+  ].map(([k,v,cls]) =>
+    `<li class="result-claim"><span class="claim-key">${k}</span><span class="claim-val ${cls}">${v}</span></li>`
+  ).join('');
+
+  box.classList.add('visible');
+}
+
+function randomJti() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random()*16|0;
+    return (c==='x'?r:(r&0x3|0x8)).toString(16);
+  });
+}
+
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
 </body>
 </html>
